@@ -4,23 +4,40 @@
  */
 package org.itson.proyectografos;
 
+import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleGraph;
 /**
  *
  * @author hoshi
  */
 public class Implementacion {
     
+    Graph<String, DefaultEdge> grafo = new SimpleGraph<>(DefaultEdge.class);
     
-    
-    public void agregarCiudad(){
-        
+    public boolean buscarCiudad(String ciudad) {
+    return grafo.containsVertex(ciudad);
     }
     
-    public void registrarColindancia(){
-        
+    public void agregarCiudad(String ciudad){
+        grafo.addVertex(ciudad);
     }
     
-    public void calcularCostoPeaje(){
+    public void registrarColindancia(String ciudad, String[] colindancias){
+        if(this.buscarCiudad(ciudad)){
+             for (String colindancia : colindancias) {
+                 if(!this.buscarCiudad(ciudad)){
+                     grafo.addVertex(colindancia);
+                 }
+                    grafo.addEdge(ciudad, colindancia);
+                }
+        }
+    }
+    
+    public void costoPeaje(){
+        
+        
     }
     
     public void registrarDistancia(){
