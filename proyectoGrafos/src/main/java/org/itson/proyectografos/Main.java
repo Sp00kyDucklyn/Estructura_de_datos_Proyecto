@@ -18,9 +18,10 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Implementacion implementacion = new Implementacion();
-        int op = -1;
         Scanner tec = new Scanner(System.in);
+        Implementacion implementacion = new Implementacion();
+        int op = 1;
+        
         
         while (op != 0) {
             System.out.println("---- Menú ----");
@@ -70,7 +71,7 @@ public class Main {
 //                    break;
                  case 1:
                     System.out.print("Ingrese el nombre de la ciudad: ");
-                    String nombreCiudad = tec.nextLine();
+                    String nombreCiudad = tec.next();
                     Ciudad ciudad = new Ciudad(nombreCiudad);
                     implementacion.agregarCiudad(ciudad);
                     System.out.println("Ciudad agregada exitosamente.");
@@ -115,7 +116,6 @@ public class Main {
                     System.out.println("Distancias registradas exitosamente.");
                     break;
             }
-            System.out.println("");
         }
     }
     
