@@ -18,9 +18,9 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Implementacion implementacion = new Implementacion(null);
         Scanner tec = new Scanner(System.in);
-        Implementacion implementacion = new Implementacion();
-        int op = 1;
+        int op = -1;
         
         
         while (op != 0) {
@@ -38,6 +38,7 @@ public class Main {
             System.out.println("10. Salir");
             System.out.print("--> ");
             op = tec.nextInt();
+            tec.nextLine();
             switch (op) {
 //                case 1:
 //                    System.out.println("");
@@ -69,54 +70,64 @@ public class Main {
 //                    System.out.println("Adiós...");
 //                    ventana.dispose();
 //                    break;
-                 case 1:
-                    System.out.print("Ingrese el nombre de la ciudad: ");
-                    String nombreCiudad = tec.next();
-                    Ciudad ciudad = new Ciudad(nombreCiudad);
-                    implementacion.agregarCiudad(ciudad);
-                    System.out.println("Ciudad agregada exitosamente.");
+                  case 1:
+                    System.out.println("Nombre de la ciudad:");
+                    String nombreCiudad = tec.nextLine();
+                    implementacion.agregarCiudad(nombreCiudad);
+                    System.out.println("Ciudad agregada correctamente.");
                     break;
                 case 2:
-                    System.out.print("Ingrese el nombre de la ciudad: ");
+                    System.out.println("Nombre de la ciudad origen:");
                     String nombreCiudadOrigen = tec.nextLine();
-                    System.out.print("Ingrese el número de colindancias: ");
-                    int numColindancias = tec.nextInt();
-                    tec.nextLine(); // Limpiar el buffer de entrada
-                    Ciudad[] colindancias = new Ciudad[numColindancias];
-                    for (int i = 0; i < numColindancias; i++) {
-                        System.out.print("Ingrese el nombre de la colindancia #" + (i+1) + ": ");
-                        String nombreColindancia = tec.nextLine();
-                        Ciudad colindancia = new Ciudad(nombreColindancia);
-                        colindancias[i] = colindancia;
-                    }
-                    Ciudad ciudadOrigen = new Ciudad(nombreCiudadOrigen);
-                    implementacion.registrarColindancia(ciudadOrigen, colindancias);
-                    System.out.println("Colindancias registradas exitosamente.");
+                    System.out.println("Nombre de la ciudad destino:");
+                    String nombreCiudadDestino = tec.nextLine();
+                    System.out.println("Distancia:");
+                    int distancia = tec.nextInt();
+                    System.out.println("Costo de peaje:");
+                    int costoPeaje = tec.nextInt();
+                    implementacion.agregarColindancia(nombreCiudadOrigen, nombreCiudadDestino, distancia, costoPeaje);
+                    System.out.println("Colindancia agregada correctamente.");
                     break;
                 case 3:
-                    System.out.print("Ingrese el nombre de la ciudad origen: ");
-                    String nombreCiudadOrigen2 = tec.nextLine();
-                    System.out.print("Ingrese el número de ciudades destino: ");
-                    int numCiudadesDestino = tec.nextInt();
-                    tec.nextLine(); // Limpiar el buffer de entrada
-                    Ciudad[] ciudadesDestino = new Ciudad[numCiudadesDestino];
-                    for (int i = 0; i < numCiudadesDestino; i++) {
-                        System.out.print("Ingrese el nombre de la ciudad destino #" + (i+1) + ": ");
-                        String nombreCiudadDestino = tec.nextLine();
-                        Ciudad ciudadDestino = new Ciudad(nombreCiudadDestino);
-                        ciudadesDestino[i] = ciudadDestino;
-                    }
-                    System.out.print("Ingrese la distancia: ");
-                    int distancia = tec.nextInt();
-                    System.out.print("Ingrese el costo: ");
-                    int costo = tec.nextInt();
-                    tec.nextLine(); // Limpiar el buffer de entrada
-                    Ciudad ciudadOrigen2 = new Ciudad(nombreCiudadOrigen2);
-                    implementacion.registrarDistancia(ciudadOrigen2, ciudadesDestino, distancia, costo);
-                    System.out.println("Distancias registradas exitosamente.");
+                    System.out.println("Nombre de la ciudad origen:");
+                    nombreCiudadOrigen = tec.nextLine();
+                    System.out.println("Nombre de la ciudad destino:");
+                    nombreCiudadDestino = tec.nextLine();
+                    System.out.println("Distancia:");
+                    distancia = tec.nextInt();
+                    System.out.println("Costo de peaje:");
+                    costoPeaje = tec.nextInt();
+                    implementacion.registrarDistanciaYCostoPeaje(nombreCiudadOrigen, nombreCiudadDestino, distancia, costoPeaje);
+                    System.out.println("Distancia y costo de peaje registrados correctamente.");
                     break;
+                case 4:
+                    System.out.println("Nombre de la ciudad origen:");
+                    nombreCiudadOrigen = tec.nextLine();
+                    System.out.println("Nombre de la ciudad destino:");
+                    nombreCiudadDestino = tec.nextLine();
+                    System.out.println("Nueva distancia:");
+                    distancia = tec.nextInt();
+                    System.out.println("Nuevo costo de peaje:");
+                    costoPeaje = tec.nextInt();
+                    implementacion.modificarDistanciaYCostoPeaje(nombreCiudadOrigen, nombreCiudadDestino, distancia, costoPeaje);
+                    System.out.println("Distancia y costo de peaje modificados correctamente.");
+                    break;
+                case 5:
+                    System.out.println("Nombre de la ciudad origen:");
+                    nombreCiudadOrigen = tec.nextLine();
+                    System.out.println("Nombre de la ciudad destino:");
+                    nombreCiudadDestino = tec.nextLine();
+                    implementacion.consultarRutaMasCorta(nombreCiudadOrigen, nombreCiudadDestino);
+                    break;
+                case 0:
+                    System.out.println("Adiós.");
+                    break;
+                default:
+                    System.out.println("Opción inválida");
             }
         }
     }
-    
+   
+
+
 }
