@@ -6,17 +6,28 @@ package org.itson.proyectografos;
 
 /**
  *
- * @author Kimberly Serrano pon tú id aquí & Carmen Hernández 240210
+ * @author Kimberly Serrano 233023 aquí & Carmen Hernández 240210
  */
 class Colindancia {
+
     private Ciudad ciudadOrigen;
     private Ciudad ciudadDestino;
-    private int distancia;
-    private int costoPeaje;
+    private Integer distancia;
+    private Integer costoPeaje;
 
-    public Colindancia(Ciudad ciudadOrigen, Ciudad ciudadDestino, int distancia, int costoPeaje) {
+    public Colindancia(Ciudad ciudadOrigen, Ciudad ciudadDestino, Integer distancia, Integer costoPeaje) {
         this.ciudadOrigen = ciudadOrigen;
         this.ciudadDestino = ciudadDestino;
+        this.distancia = distancia;
+        this.costoPeaje = costoPeaje;
+    }
+
+    public Colindancia(Ciudad ciudadOrigen, Ciudad ciudadDestino) {
+        this.ciudadOrigen = ciudadOrigen;
+        this.ciudadDestino = ciudadDestino;
+    }
+
+    public Colindancia(Integer distancia, Integer costoPeaje) {
         this.distancia = distancia;
         this.costoPeaje = costoPeaje;
     }
@@ -29,21 +40,19 @@ class Colindancia {
         return ciudadDestino;
     }
 
-    public int getDistancia() {
+    public Integer getDistancia() {
         return distancia;
     }
 
-    public void setDistancia(int distancia) {
+    public void setDistancia(Integer distancia) {
         this.distancia = distancia;
     }
 
-    public int getCostoPeaje() {
+    public Integer getCostoPeaje() {
         return costoPeaje;
     }
 
-    public void setCostoPeaje(int costoPeaje) {
+    public void setCostoPeaje(Integer costoPeaje) {
         this.costoPeaje = costoPeaje;
     }
 }
-    
-

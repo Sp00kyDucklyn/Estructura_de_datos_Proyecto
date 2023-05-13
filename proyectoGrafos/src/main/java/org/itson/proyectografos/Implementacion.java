@@ -14,21 +14,23 @@ import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleGraph;
+
 /**
  *
- * @author Kimberly Serrano pon tú id aquí & Carmen Hernández 240210
+ * @author Kimberly Serrano 233023 & Carmen Hernández 240210
  */
 public class Implementacion {
-    
-    private List<Ciudad> ciudades;
 
-    public Implementacion(List<Ciudad> ciudades) {
-        ciudades = new ArrayList<>();
-    }
+    private List<Ciudad> ciudades = new ArrayList<>();
 
-    public void agregarCiudad(String nombreCiudad) {
-        Ciudad ciudad = new Ciudad(nombreCiudad);
-        ciudades.add(ciudad);
+    private Colindancia buscarColindancia(Ciudad ciudadOrigen, Ciudad ciudadDestino) {
+        List<Colindancia> colindancias = ciudadOrigen.getColindancias();
+        for (Colindancia colindancia : colindancias) {
+            if (colindancia.getCiudadDestino().equals(ciudadDestino)) {
+                return colindancia;
+            }
+        }
+        return null;
     }
 
     public Ciudad buscarCiudad(String nombreCiudad) {
@@ -39,26 +41,100 @@ public class Implementacion {
         }
         return null;
     }
-    
-    private Colindancia buscarColindancia(Ciudad ciudadOrigen, Ciudad ciudadDestino) {
-        List<Colindancia> colindancias = ciudadOrigen.getColindancias();
-        for (Colindancia colindancia : colindancias) {
-            if (colindancia.getCiudadDestino().equals(ciudadDestino)) {
-                return colindancia;
-            }
+
+    public void imprimirCiudades() {
+        for (Ciudad ciudad : ciudades) {
+            System.out.println(ciudad.getNombre());
         }
-        return null;
     }
-    
-    public void agregarColindancia(String nombreCiudadOrigen, String nombreCiudadDestino, int distancia, int costoPeaje) {
+
+    // 1) Agregar una ciudad
+    public void agregarCiudad(String nombreCiudad) {
+        if (buscarCiudad(nombreCiudad) == null) {
+            Ciudad ciudad = new Ciudad(nombreCiudad);
+            ciudades.add(ciudad);
+            System.out.println("Ciudad agregada correctamente.");
+        } else {
+            System.out.println("Esta ciudad ya esta registrada.");
+        }
+    }
+
+    // 2) Registrar una colindancia entre dos ciudades
+    public void agregarColindancia(String nombreCiudadOrigen, String nombreCiudadDestino) {
         Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
-        Ciudad ciudadDestino = buscarCiudad(nombreCiudadOrigen);
-        if (ciudadOrigen != null && ciudadDestino != null) {
-            Colindancia colindancia = new Colindancia(ciudadOrigen, ciudadDestino, distancia, costoPeaje);
+        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
+        if (ciudadOrigen == null) {
+            System.out.println("La ciudad de origen " + nombreCiudadOrigen + " no está registrada");
+        } else if (ciudadDestino == null) {
+            System.out.println("La ciudad de destino " + nombreCiudadDestino + " no está registrada");
+        } else if (buscarColindancia(ciudadOrigen, ciudadDestino) == null || buscarColindancia(ciudadDestino, ciudadOrigen) == null) {
+            Colindancia colindancia = new Colindancia(ciudadOrigen, ciudadDestino);
+            Colindancia colindanciaInversa = new Colindancia(ciudadDestino, ciudadOrigen);
             ciudadOrigen.agregarColindancia(colindancia);
+            ciudadDestino.agregarColindancia(colindanciaInversa);
+            System.out.println("Colindancia agregada correctamente.");
+        } else {
+            System.out.println("Esta colindancia ya fue registrada anteriormente.");
         }
     }
-    
+
+    //3) Registrar distancia y costo de peaje entre dos ciudades colindantes
+    public void agregarColindancia(String nombreCiudadOrigen, String nombreCiudadDestino, Integer distancia, Integer costoPeaje) {
+        Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
+        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
+        if (ciudadOrigen == null) {
+            System.out.println("La ciudad de origen " + nombreCiudadOrigen + " no está registrada");
+        } else if (ciudadDestino == null) {
+            System.out.println("La ciudad de destino " + nombreCiudadDestino + " no está registrada");
+        } else if (buscarColindancia(ciudadOrigen, ciudadDestino) != null && (buscarColindancia(ciudadDestino, ciudadOrigen) != null)) {
+            Colindancia colindanciaObtenida = buscarColindancia(ciudadOrigen, ciudadDestino);
+            Colindancia colindanciaObtenidaInversa = buscarColindancia(ciudadDestino, ciudadOrigen);
+            if (colindanciaObtenida.getCostoPeaje() == null && colindanciaObtenida.getDistancia() == null
+                    && colindanciaObtenidaInversa.getCostoPeaje() == null && colindanciaObtenidaInversa.getDistancia() == null) {
+                colindanciaObtenida.setCostoPeaje(costoPeaje);
+                colindanciaObtenida.setDistancia(distancia);
+                colindanciaObtenidaInversa.setCostoPeaje(costoPeaje);
+                colindanciaObtenidaInversa.setDistancia(distancia);
+                System.out.println("Distancia y costo de peaje registrados correctamente.");
+            } else {
+                System.out.println("Esta colindancia ya tiene peaje y distancia, si desea editarlos vaya a la opción 4.");
+            }
+
+        } else {
+            System.out.println("No hay colindancia entre estas dos ciudades.");
+        }
+    }
+
+    //4) Modificar distancia y costo de peaje entre dos ciudades colindantes
+    public void modificarDistanciaYCostoPeaje(String nombreCiudadOrigen, String nombreCiudadDestino, Integer distancia, Integer costoPeaje) {
+        Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
+        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
+
+        if (ciudadOrigen != null && ciudadDestino != null) {
+            // Buscamos la colindancia en ambas direcciones para actualizarla
+            Colindancia colindancia1 = buscarColindancia(ciudadOrigen, ciudadDestino);
+            Colindancia colindancia2 = buscarColindancia(ciudadDestino, ciudadOrigen);
+
+            if (colindancia1 != null && colindancia2 != null) {
+                if (colindancia1.getCostoPeaje() != null && colindancia1.getDistancia() != null
+                        && colindancia2.getCostoPeaje() != null && colindancia2.getDistancia() != null) {
+                    colindancia1.setDistancia(distancia);
+                    colindancia1.setCostoPeaje(costoPeaje);
+                    colindancia2.setDistancia(distancia);
+                    colindancia2.setCostoPeaje(costoPeaje);
+                    System.out.println("Distancia y costo de peaje modificados correctamente.");
+                } else {
+                    System.out.println("No hay datos para modificar, si desea agregarlos vaya a la opción 3.");
+                }
+
+            } else {
+                System.out.println("No hay colindancia entre estas dos ciudades.");
+            }
+        } else {
+            System.out.println("Alguna de las ciudades no existe, por favor revisa si esta bien escrita o ya fue agregada.");
+        }
+    }
+
     public void registrarDistanciaYCostoPeaje(String nombreCiudadOrigen, String nombreCiudadDestino, int distancia, int costoPeaje) {
         Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
         Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
@@ -72,24 +148,6 @@ public class Implementacion {
         }
     }
 
-    public void modificarDistanciaYCostoPeaje(String nombreCiudadOrigen, String nombreCiudadDestino, int distancia, int costoPeaje) {
-        Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
-        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
-
-        if (ciudadOrigen != null && ciudadDestino != null) {
-            // Buscamos la colindancia en ambas direcciones para actualizarla
-            Colindancia colindancia1 = buscarColindancia(ciudadOrigen, ciudadDestino);
-            Colindancia colindancia2 = buscarColindancia(ciudadDestino, ciudadOrigen);
-
-            if (colindancia1 != null && colindancia2 != null) {
-                colindancia1.setDistancia(distancia);
-                colindancia1.setCostoPeaje(costoPeaje);
-                colindancia2.setDistancia(distancia);
-                colindancia2.setCostoPeaje(costoPeaje);
-            }
-        }
-    }
-    
     public void consultarRutaMasCorta(String nombreCiudadOrigen, String nombreCiudadDestino) {
         Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
         Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
@@ -177,9 +235,9 @@ public class Implementacion {
         }
     }
 
- }
-    //List<Colindancia> conex = new ArrayList<>();
-    //Graph<String, DefaultEdge> grafo = new SimpleGraph<>(DefaultEdge.class);
+}
+//List<Colindancia> conex = new ArrayList<>();
+//Graph<String, DefaultEdge> grafo = new SimpleGraph<>(DefaultEdge.class);
 //    
 //    public boolean buscarCiudad(String ciudad) {
 //    return grafo.containsVertex(ciudad);
@@ -218,6 +276,4 @@ public class Implementacion {
 //            }
 //        }
 //    }
-   
-    
 

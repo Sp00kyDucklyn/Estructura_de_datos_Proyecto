@@ -6,11 +6,12 @@ package org.itson.proyectografos;
 
 /**
  *
- * @author Kimberly Serrano pon tú id aquí & Carmen Hernández 240210
+ * @author Kimberly Serrano 233023 & Carmen Hernández 240210
  */
 import java.util.*;
 
 public class Ciudad {
+
     private String nombre;
     private List<Colindancia> colindancias;
 
@@ -47,5 +48,3 @@ public class Ciudad {
         return sb.toString();
     }
 }
-    
-
