@@ -23,7 +23,7 @@ public class Main {
         int op = -1;
 
         while (op != 0) {
-            System.out.println("---- Menú ----");
+            System.out.println("--------------------------------- Menú ---------------------------------");
             System.out.println("Seleccione una opción:");
             System.out.println("1. Agregar una ciudad");
             System.out.println("2. Registrar una colindancia entre dos ciudades");
@@ -74,6 +74,7 @@ public class Main {
                     System.out.println("Introduzca el nombre de la ciudad a registrar.");
                     String nombreCiudad = tec.nextLine();
                     implementacion.agregarCiudad(nombreCiudad);
+                    System.out.println("");
                     break;
                 case 2:
                     System.out.println("Introduzca las ciudades colindantes.");
@@ -82,6 +83,7 @@ public class Main {
                     System.out.println("Nombre de la ciudad destino:");
                     String nombreCiudadDestino = tec.nextLine();
                     implementacion.agregarColindancia(nombreCiudadOrigen, nombreCiudadDestino);
+                    System.out.println("");
                     break;
                 case 3:
                     System.out.println("Introduzca las ciudades colindantes, la distancia y el costo de peaje.");
@@ -94,6 +96,7 @@ public class Main {
                     System.out.println("Costo de peaje:");
                     Integer costoPeaje = tec.nextInt();
                     implementacion.agregarColindancia(nombreCiudadOrigen, nombreCiudadDestino, distancia, costoPeaje);
+                    System.out.println("");
                     break;
                 case 4:
                     System.out.println("Nombre de la ciudad origen:");
@@ -105,6 +108,7 @@ public class Main {
                     System.out.println("Nuevo costo de peaje:");
                     costoPeaje = tec.nextInt();
                     implementacion.modificarDistanciaYCostoPeaje(nombreCiudadOrigen, nombreCiudadDestino, distancia, costoPeaje);
+                    System.out.println("");
                     break;
                 case 5:
                     System.out.println("Nombre de la ciudad origen:");
@@ -112,17 +116,44 @@ public class Main {
                     System.out.println("Nombre de la ciudad destino:");
                     nombreCiudadDestino = tec.nextLine();
                     implementacion.consultarRutaMasCorta(nombreCiudadOrigen, nombreCiudadDestino);
+                    System.out.println("");
                     break;
-                case 0:
+                case 6:
+                    break;
+                case 7:
+                    System.out.println("Lista las ciudades registradas y sus colindancias");
+                    System.out.println("");
+                    implementacion.listarCiudadesConColidancias();
+                    System.out.println("");
+                    break;
+                case 8:
+                    System.out.println("Introduzca las ciudades colindantes.");
+                    System.out.println("Nombre de la ciudad origen:");
+                    nombreCiudadOrigen = tec.nextLine();
+                    System.out.println("Nombre de la ciudad destino:");
+                    nombreCiudadDestino = tec.nextLine();
+                    implementacion.eliminarColindancia(nombreCiudadOrigen, nombreCiudadDestino);
+                    System.out.println("");
+                    break;
+                case 9:
+                    System.out.println("Introduzca las ciudad a eliminar.");
+                    System.out.println("Nombre de la ciudad: ");
+                    String ciudad = tec.nextLine();
+                    implementacion.eliminarCiudad(ciudad);
+                    System.out.println("");
+                    break;
+                case 10:
                     System.out.println("Adiós.");
                     break;
 
                 // solo ccomo auxiliar
                 case 18:
                     implementacion.imprimirCiudades();
+                    System.out.println("");
                     break;
                 default:
                     System.out.println("Opción inválida");
+                    System.out.println("");
             }
         }
     }

@@ -36,15 +36,4 @@ public class Ciudad {
         colindancias.remove(colindancia);
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(nombre).append("\n");
-        for (Colindancia colindancia : colindancias) {
-            sb.append("colinda con ").append(colindancia.getCiudadDestino().getNombre());
-            sb.append(" (distancia: ").append(colindancia.getDistancia());
-            sb.append(", peaje: ").append(colindancia.getCostoPeaje()).append(")\n");
-        }
-        return sb.toString();
-    }
 }

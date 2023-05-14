@@ -55,4 +55,5 @@ class Colindancia {
     public void setCostoPeaje(Integer costoPeaje) {
         this.costoPeaje = costoPeaje;
     }
+
 }

@@ -53,7 +53,7 @@ public class Implementacion {
         if (buscarCiudad(nombreCiudad) == null) {
             Ciudad ciudad = new Ciudad(nombreCiudad);
             ciudades.add(ciudad);
-            System.out.println("Ciudad agregada correctamente.");
+            System.out.println("Ciudad '" + nombreCiudad + "' agregada correctamente.");
         } else {
             System.out.println("Esta ciudad ya esta registrada.");
         }
@@ -134,20 +134,74 @@ public class Implementacion {
             System.out.println("Alguna de las ciudades no existe, por favor revisa si esta bien escrita o ya fue agregada.");
         }
     }
+    
+    // 5) Consultar ruta más corta entre dos ciudades
 
-    public void registrarDistanciaYCostoPeaje(String nombreCiudadOrigen, String nombreCiudadDestino, int distancia, int costoPeaje) {
-        Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
-        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
-
-        if (ciudadOrigen != null && ciudadDestino != null) {
-            Colindancia colindancia = new Colindancia(ciudadOrigen, ciudadDestino, distancia, costoPeaje);
-            ciudadOrigen.agregarColindancia(colindancia);
-            // También agregamos la colindancia inversa para mantener la simetría
-            Colindancia colindanciaInversa = new Colindancia(ciudadDestino, ciudadOrigen, distancia, costoPeaje);
-            ciudadDestino.agregarColindancia(colindanciaInversa);
+    //7) Listar las ciudades registradas y sus colindancias
+    public void listarCiudadesConColidancias() {
+        for (Ciudad ciudad : ciudades) {
+            System.out.println("Ciudad: " + ciudad.getNombre());
+            for (int i = 0; i < ciudad.getColindancias().size(); i++) {
+                System.out.println("Colinda con " + ciudad.getColindancias().get(i).getCiudadDestino().getNombre());
+            }
+            System.out.println(" ");
         }
     }
 
+    //8) Eliminar colindancia
+    public void eliminarColindancia(String nombreCiudadOrigen, String nombreCiudadDestino) {
+        Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
+        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
+        if (ciudadOrigen == null) {
+            System.out.println("La ciudad de origen " + nombreCiudadOrigen + " no está registrada");
+        } else if (ciudadDestino == null) {
+            System.out.println("La ciudad de destino " + nombreCiudadDestino + " no está registrada");
+        } else if (buscarColindancia(ciudadOrigen, ciudadDestino) != null || buscarColindancia(ciudadDestino, ciudadOrigen) != null) {
+            Colindancia colindancia = buscarColindancia(ciudadOrigen, ciudadDestino);
+            Colindancia colindanciaInversa = buscarColindancia(ciudadDestino, ciudadOrigen);
+            ciudadOrigen.eliminarColindancia(colindancia);
+            ciudadDestino.eliminarColindancia(colindanciaInversa);
+            System.out.println("Colindancia eliminada correctamente.");
+        } else {
+            System.out.println("Esta colindancia no existe.");
+        }
+    }
+
+    //9) Eliminar una ciudad del mapa
+    public void eliminarCiudad(String ciudadEliminar) {
+        if (buscarCiudad(ciudadEliminar) != null) {
+            Ciudad ciudad = buscarCiudad(ciudadEliminar);
+            ciudad.getColindancias().clear();
+            ciudades.remove(ciudad);
+
+            for (Ciudad ciudadInterar : ciudades) {
+                for (int i = 0; i < ciudadInterar.getColindancias().size(); i++) {
+                    if (ciudadInterar.getColindancias().get(i).getCiudadDestino().getNombre().equals(ciudadEliminar)) {
+                        Colindancia colindancia = ciudadInterar.getColindancias().get(i);
+                        ciudadInterar.eliminarColindancia(colindancia);
+                    }
+                }
+            }
+
+            System.out.println(ciudad.getNombre() + " <- Eliminada correctamente.");
+        } else {
+            System.out.println("No hay registro de esta ciudad.");
+        }
+
+    }
+
+//    public void registrarDistanciaYCostoPeaje(String nombreCiudadOrigen, String nombreCiudadDestino, int distancia, int costoPeaje) {
+//        Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
+//        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
+//
+//        if (ciudadOrigen != null && ciudadDestino != null) {
+//            Colindancia colindancia = new Colindancia(ciudadOrigen, ciudadDestino, distancia, costoPeaje);
+//            ciudadOrigen.agregarColindancia(colindancia);
+//            // También agregamos la colindancia inversa para mantener la simetría
+//            Colindancia colindanciaInversa = new Colindancia(ciudadDestino, ciudadOrigen, distancia, costoPeaje);
+//            ciudadDestino.agregarColindancia(colindanciaInversa);
+//        }
+//    }
     public void consultarRutaMasCorta(String nombreCiudadOrigen, String nombreCiudadDestino) {
         Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
         Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
