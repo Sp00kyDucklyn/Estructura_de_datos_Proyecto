@@ -120,6 +120,13 @@ public class Main {
                     System.out.println("");
                     break;
                 case 6:
+                    System.out.println("Nombre de la ciudad origen:");
+                    nombreCiudadOrigen = tec.nextLine();
+                    System.out.println("Nombre de la ciudad destino:");
+                    nombreCiudadDestino = tec.nextLine();
+//                    implementacion.consultarRutaMasCorta(nombreCiudadOrigen, nombreCiudadDestino);
+                    implementacion.calcularRutaMasBarata(nombreCiudadOrigen, nombreCiudadDestino);
+                    System.out.println("");
                     break;
                 case 7:
                     System.out.println("Lista las ciudades registradas y sus colindancias");

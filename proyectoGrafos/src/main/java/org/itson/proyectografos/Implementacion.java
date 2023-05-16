@@ -5,6 +5,7 @@
 package org.itson.proyectografos;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -191,18 +192,6 @@ public class Implementacion {
 
     }
 
-//    public void registrarDistanciaYCostoPeaje(String nombreCiudadOrigen, String nombreCiudadDestino, int distancia, int costoPeaje) {
-//        Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
-//        Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
-//
-//        if (ciudadOrigen != null && ciudadDestino != null) {
-//            Colindancia colindancia = new Colindancia(ciudadOrigen, ciudadDestino, distancia, costoPeaje);
-//            ciudadOrigen.agregarColindancia(colindancia);
-//            // También agregamos la colindancia inversa para mantener la simetría
-//            Colindancia colindanciaInversa = new Colindancia(ciudadDestino, ciudadOrigen, distancia, costoPeaje);
-//            ciudadDestino.agregarColindancia(colindanciaInversa);
-//        }
-//    }
     public void consultarRutaMasCorta(String nombreCiudadOrigen, String nombreCiudadDestino) {
         Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
         Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
@@ -262,7 +251,6 @@ public class Implementacion {
                 }
             }
         }
-
         // Reconstruir el camino si se encontró una ruta
         if (predecesores.containsKey(ciudadDestino)) {
             List<Ciudad> ruta = new ArrayList<>();
@@ -272,7 +260,6 @@ public class Implementacion {
                 ciudadActual = predecesores.get(ciudadActual);
             }
             ruta.add(0, ciudadOrigen);
-
             // Imprimir la ruta y la distancia total
             // Imprimir la ruta y la distancia total
             if (ruta.isEmpty()) {
@@ -289,14 +276,11 @@ public class Implementacion {
             }
         }
     }
-
-    
-    
     //////////////////////////////////////////////////
-    
      public void calcularRutaMasCorta(String nomOrigen, String nomDestino) {
         Ciudad origen = buscarCiudad(nomOrigen);
         Ciudad destino = buscarCiudad(nomDestino);
+        //Aqui esta el problema
         origen.setDistancia(0);
         PriorityQueue<Ciudad> cola = new PriorityQueue<>();
         cola.add(origen);
@@ -307,6 +291,7 @@ public class Implementacion {
 
             for (Colindancia colindancia : actual.getColindancias()) {
                 Ciudad vecino = colindancia.getCiudadDestino();
+                //Aqui otro problema
                 int distancia = colindancia.getDistancia();
                 int nuevaDistancia = actual.getDistancia() + distancia;
 
@@ -326,6 +311,162 @@ public class Implementacion {
             System.out.print(ciudad.getNombre() + " -> ");
             ciudad = ciudad.getPrevia();
         }
+    }
+     
+     public void calcularRutaMasBarata(String nombreCiudadOrigen, String nombreCiudadDestino) {
+    Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
+    Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
+    if (ciudadOrigen == null) {
+        System.out.println("La ciudad de origen " + nombreCiudadOrigen + " no está registrada");
+    } else if (ciudadDestino == null) {
+        System.out.println("La ciudad de destino " + nombreCiudadDestino + " no está registrada");
+    } else {
+        // Establecemos la distancia de la ciudad de origen a 0
+        ciudadOrigen.setDistancia(0);
+
+        // Ejecutamos el algoritmo de Bellman-Ford para encontrar la ruta más barata
+        for (int i = 1; i < ciudades.size(); i++) {
+            for (Ciudad ciudad : ciudades) {
+                for (Colindancia colindancia : ciudad.getColindancias()) {
+                    Ciudad ciudadOrigenColindancia = colindancia.getCiudadOrigen();
+                    Ciudad ciudadDestinoColindancia = colindancia.getCiudadDestino();
+                    if (ciudadOrigenColindancia == ciudad) {
+                        int distanciaAcumulada = ciudad.getDistancia() + colindancia.getCostoPeaje();
+                        if (distanciaAcumulada < ciudadDestinoColindancia.getDistancia()) {
+                            ciudadDestinoColindancia.setDistancia(distanciaAcumulada);
+                            ciudadDestinoColindancia.setPrevia(ciudad);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Verificamos si hay ciclos negativos
+        for (Ciudad ciudad : ciudades) {
+            for (Colindancia colindancia : ciudad.getColindancias()) {
+                Ciudad ciudadOrigenColindancia = colindancia.getCiudadOrigen();
+                Ciudad ciudadDestinoColindancia = colindancia.getCiudadDestino();
+                int distanciaAcumulada = ciudadOrigenColindancia.getDistancia() + colindancia.getCostoPeaje();
+                if (distanciaAcumulada < ciudadDestinoColindancia.getDistancia()) {
+                    System.out.println("Hay ciclos negativos en el grafo");
+                    return;
+                }
+            }
+        }
+
+        // Construimos la ruta más barata
+        List<Ciudad> ruta = new ArrayList<>();
+        for (Ciudad ciudad = ciudadDestino; ciudad != null; ciudad = ciudad.getPrevia()) {
+            ruta.add(ciudad);
+        }
+        Collections.reverse(ruta);
+        System.out.print("Ruta más barata de " + nombreCiudadOrigen + " a " + nombreCiudadDestino + ": ");
+        for (Ciudad ciudad : ruta) {
+            System.out.print(ciudad.getNombre() + " ");
+        }
+        System.out.println("Distancia total: " + ciudadDestino.getDistancia());
+    }
+}
+
+
+//    public List<Ciudad> encontrarRutaMasBarata(String nombreCiudadOrigen, String nombreCiudadDestino) {
+//    // Buscar las ciudades de origen y destino
+//    Ciudad ciudadOrigen = buscarCiudad(nombreCiudadOrigen);
+//    Ciudad ciudadDestino = buscarCiudad(nombreCiudadDestino);
+//
+//    // Verificar que las ciudades existan
+//        if (ciudadOrigen == null) {
+//            System.out.println("La ciudad de origen " + nombreCiudadOrigen + " no está registrada");
+//            return null;
+//        }
+//
+//        if (ciudadDestino == null) {
+//            System.out.println("La ciudad de destino " + nombreCiudadDestino + " no está registrada");
+//            return null;
+//        }
+//
+//
+//    // Inicializar la tabla de distancias y padres
+//    Map<Ciudad, Integer> distancias = new HashMap<>();
+//    Map<Ciudad, Ciudad> padres = new HashMap<>();
+//    for (Ciudad ciudad : ciudades) {
+//        distancias.put(ciudad, Integer.MAX_VALUE);
+//        padres.put(ciudad, null);
+//    }
+//    distancias.put(ciudadOrigen, 0);
+//
+//    // Crear el conjunto de ciudades no visitadas
+//    Set<Ciudad> noVisitadas = new HashSet<>(ciudades);
+//
+//    // Aplicar el algoritmo de Dijkstra
+//    while (!noVisitadas.isEmpty()) {
+//        // Buscar la ciudad no visitada con la distancia más corta
+//        Ciudad ciudadActual = null;
+//        int distanciaMinima = Integer.MAX_VALUE;
+//        for (Ciudad ciudad : noVisitadas) {
+//            int distancia = distancias.get(ciudad);
+//            if (distancia < distanciaMinima) {
+//                ciudadActual = ciudad;
+//                distanciaMinima = distancia;
+//            }
+//        }
+//
+//        // Si no hay ciudad actual, terminar el algoritmo
+//        if (ciudadActual == null) {
+//            break;
+//        }
+//
+//        // Marcar la ciudad actual como visitada
+//        noVisitadas.remove(ciudadActual);
+//
+//        // Actualizar las distancias de las ciudades vecinas no visitadas
+//        List<Colindancia> colindancias = ciudadActual.getColindancias();
+//        for (Colindancia colindancia : colindancias) {
+//            Ciudad ciudadVecina = colindancia.getCiudadDestino();
+//            if (noVisitadas.contains(ciudadVecina)) {
+//                int distanciaNueva = distancias.get(ciudadActual) + colindancia.getDistancia();
+//                if (distanciaNueva < distancias.get(ciudadVecina)) {
+//                    distancias.put(ciudadVecina, distanciaNueva);
+//                    padres.put(ciudadVecina, ciudadActual);
+//                }
+//            }
+//        }
+//    }
+//
+//    // Reconstruir la ruta más corta
+//    List<Ciudad> ruta = new ArrayList<>();
+//    Ciudad ciudadActual = ciudadDestino;
+//    while (ciudadActual != null) {
+//        ruta.add(0, ciudadActual);
+//        ciudadActual = padres.get(ciudadActual);
+//    }
+//
+//    // Verificar que se encontró una ruta
+//    if (ruta.size() <= 1) {
+//        System.out.println("No se encontró una ruta entre " + nombreCiudadOrigen + " y " + nombreCiudadDestino);
+//        return null;
+//    }
+//
+//    // Imprimir la ruta y la distancia total
+//    int distanciaTotal = distancias.get(ciudadDestino);
+//        System.out.println("Ruta más barata entre " + nombreCiudadOrigen + " y " + nombreCiudadDestino + ": ");
+//
+//        for (int i = 0; i < ruta.size() - 1; i++) {
+//            Ciudad ciudadOrigen1 = ruta.get(i);
+//            Ciudad ciudadDestino1 = ruta.get(i + 1);
+//            Colindancia colindancia = ciudadOrigen1.getColindancias(ciudadDestino1);
+//            System.out.println("- " + ciudadOrigen1.getNombre() + " a " + ciudadDestino1.getNombre() + " (" + colindancia.getDistancia() + " km)");
+//        }
+//
+//    System.out.println("Distancia total: " + distanciaTotal + " km");
+//
+//    return ruta;
+//}
+
+
+
+    public void calcularRutaMasBarata() {
+        
     }
 }
     

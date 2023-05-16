@@ -21,6 +21,7 @@ public class Ciudad implements Comparable<Ciudad>{
     public Ciudad(String nombre) {
         this.nombre = nombre;
         colindancias = new ArrayList<>();
+        this.colindancias = new ArrayList<>();
         distancia = Integer.MAX_VALUE;
         visitado = false;
         previa = null;
