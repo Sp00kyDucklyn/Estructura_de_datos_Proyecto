@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -289,7 +290,49 @@ public class Implementacion {
         }
     }
 
+    
+    
+    //////////////////////////////////////////////////
+    
+     public void calcularRutaMasCorta(String nomOrigen, String nomDestino) {
+        Ciudad origen = buscarCiudad(nomOrigen);
+        Ciudad destino = buscarCiudad(nomDestino);
+        origen.setDistancia(0);
+        PriorityQueue<Ciudad> cola = new PriorityQueue<>();
+        cola.add(origen);
+
+        while (!cola.isEmpty()) {
+            Ciudad actual = cola.poll();
+            actual.setVisitado(true);
+
+            for (Colindancia colindancia : actual.getColindancias()) {
+                Ciudad vecino = colindancia.getCiudadDestino();
+                int distancia = colindancia.getDistancia();
+                int nuevaDistancia = actual.getDistancia() + distancia;
+
+                if (!vecino.isVisitado() && nuevaDistancia < vecino.getDistancia()) {
+                    cola.remove(vecino);
+                    vecino.setDistancia(nuevaDistancia);
+                    vecino.setPrevia(actual);
+                    cola.add(vecino);
+                }
+            }
+        }
+
+        // Imprimir la ruta más corta
+        Ciudad ciudad = destino;
+         System.out.println("La ruta mas corta es");
+        while (ciudad != null) {
+            System.out.print(ciudad.getNombre() + " -> ");
+            ciudad = ciudad.getPrevia();
+        }
+    }
 }
+    
+    
+    
+    
+
 //List<Colindancia> conex = new ArrayList<>();
 //Graph<String, DefaultEdge> grafo = new SimpleGraph<>(DefaultEdge.class);
 //    

@@ -115,7 +115,8 @@ public class Main {
                     nombreCiudadOrigen = tec.nextLine();
                     System.out.println("Nombre de la ciudad destino:");
                     nombreCiudadDestino = tec.nextLine();
-                    implementacion.consultarRutaMasCorta(nombreCiudadOrigen, nombreCiudadDestino);
+//                    implementacion.consultarRutaMasCorta(nombreCiudadOrigen, nombreCiudadDestino);
+                    implementacion.calcularRutaMasCorta(nombreCiudadOrigen, nombreCiudadDestino);
                     System.out.println("");
                     break;
                 case 6:

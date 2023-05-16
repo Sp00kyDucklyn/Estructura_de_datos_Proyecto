@@ -10,18 +10,28 @@ package org.itson.proyectografos;
  */
 import java.util.*;
 
-public class Ciudad {
+public class Ciudad implements Comparable<Ciudad>{
 
     private String nombre;
     private List<Colindancia> colindancias;
+    private int distancia;
+    private boolean visitado;
+    private Ciudad previa;
 
     public Ciudad(String nombre) {
         this.nombre = nombre;
         colindancias = new ArrayList<>();
+        distancia = Integer.MAX_VALUE;
+        visitado = false;
+        previa = null;
     }
 
     public String getNombre() {
         return nombre;
+    }
+    
+     public boolean isVisitado() {
+        return visitado;
     }
 
     public void agregarColindancia(Colindancia colindancia) {
@@ -35,5 +45,39 @@ public class Ciudad {
     public void eliminarColindancia(Colindancia colindancia) {
         colindancias.remove(colindancia);
     }
+
+    public void setDistancia(int distancia) {
+        this.distancia = distancia;
+    }
+
+    public void setVisitado(boolean visitado) {
+        this.visitado = visitado;
+    }
+
+    public Ciudad getPrevia() {
+        return previa;
+    }
+
+    public void setPrevia(Ciudad previa) {
+        this.previa = previa;
+    }
+
+    public int getDistancia() {
+        return distancia;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setColindancias(List<Colindancia> colindancias) {
+        this.colindancias = colindancias;
+    }
+
+   @Override
+    public int compareTo(Ciudad otraCiudad) {
+        return Integer.compare(distancia, otraCiudad.getDistancia());
+    }
+    
 
 }
